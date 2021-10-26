@@ -1,0 +1,67 @@
+{
+	"EventStart": {
+		"Description": "You wake up. You feel completely wet and like part of your body is under water. The liquid feels viscous and lukewarm. You open your eyes and the sight horrifies you.\nThe scene around you feels unreal. You are drenching in an insane amount of blood and you can see dead bodies everywhere.",
+		"Options": [
+			{
+				"Text": "You get the hell out of the room!",
+				"JumpTo": "EventHallway"
+			},
+			{
+				"Text": "You are too shocked to move, you wait a minute.",
+				"JumpTo": "EventEyes"
+			}
+		]
+	},
+	"EventHallway": {
+		"Description": "You quickly got out of the room into a hallway. You walk for a couple meters and end up in front of 2 doors.",
+		"Options": [
+			{
+				"Text": "You open the door on the right.",
+				"JumpTo": "EventOutside"
+			},
+			{
+				"Text": "You open the door on the left.",
+				"JumpTo": ""
+			}
+		]
+	},
+	"EventOutside": {
+		"Description": "You see the bright light of the sun. You've reached the exit.",
+		"Options": [
+			{
+				"Text": "You run to get help.",
+				"JumpTo": "GoodEnding1"
+			},
+			{
+				"Text": "You look around, trying to figure out where you are.",
+				"JumpTo": ""
+			}
+		]
+	},
+	"EventEyes": {
+		"Description": "As you are looking around the room, you see some faint movement from the corner of your eyes. As you look closer, one of the bodies suddenly open it's eyes!",
+		"Options": [
+			{
+				"Text": "You ask if they are ok.",
+				"JumpTo": ""
+			},
+			{
+				"Text": "You hit them right in the face before they can move!",
+				"JumpTo": ""
+			},
+			{
+				"Text": "You run as far as you can, panicked!",
+				"JumpTo": "EventHallway"
+			}
+		]
+	},
+	"GoodEnding1": {
+		"Description": "You run as fast as you can. After a while, you stumble on a road. You walk along the road for a while, constantly looking back, in case someone would come to catch you back.\nEventually, you see a car coming from a distance. You finally found help.\nCONGRATULATION, you won!",
+		"Options": [
+			{
+				"Text": "Go back to main menu",
+				"JumpTo": "MainMenu"
+			}
+		]
+	}
+}
