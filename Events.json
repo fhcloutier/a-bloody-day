@@ -43,14 +43,36 @@
 		"Options": [
 			{
 				"Text": "You ask if they are ok.",
-				"JumpTo": ""
+				"StateChange": "has_ally",
+				"JumpTo": "EventHelp"
 			},
 			{
 				"Text": "You hit them right in the face before they can move!",
-				"JumpTo": ""
+				"StateChange": "is_murderer",
+				"JumpTo": "EventKill"
 			},
 			{
 				"Text": "You run as far as you can, panicked!",
+				"JumpTo": "EventHallway"
+			}
+		]
+	},
+	// TODO: Add meat around this event
+	"EventHelp": {
+		"Description": "You help them get up",
+		"Options": [
+			{
+				"Text": "You both move on.",
+				"JumpTo": "EventHallway"
+			}
+		]
+	},
+	// TODO: Add meat around this event
+	"EventKill": {
+		"Description": "You hit them right between the eyes, killing them on the spot",
+		"Options": [
+			{
+				"Text": "You walk out alone.",
 				"JumpTo": "EventHallway"
 			}
 		]

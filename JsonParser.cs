@@ -38,16 +38,16 @@ namespace A_Bloody_Day
 			test1.Name = "Start";
 			test1.Description = "You wake up. You feel completely wet and ..";
 			List<Option> optionsList = new List<Option>(2);
-			optionsList.Add(new Option("Hell out", "hallway"));
-			optionsList.Add(new Option("Too shocked", "FirstRoom"));
+			optionsList.Add(new Option("Hell out", "hallway", ""));
+			optionsList.Add(new Option("Too shocked", "FirstRoom", ""));
 			test1.Options = optionsList;
 
 			Event test2 = new Event();
 			test2.Name = "Hallway";
 			test2.Description = "You sleep...";
 			List<Option> optionsList2 = new List<Option>(2);
-			optionsList2.Add(new Option("Back out", "outside"));
-			optionsList2.Add(new Option("Too wet", "die"));
+			optionsList2.Add(new Option("Back out", "outside", ""));
+			optionsList2.Add(new Option("Too wet", "die", ""));
 			test2.Options = optionsList2;
 			events[0] = test1;
 			events[1] = test2;

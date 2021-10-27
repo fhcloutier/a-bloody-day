@@ -10,12 +10,21 @@ namespace A_Bloody_Day
 	{
 		public void StartGame()
 		{
+			Dictionary<string, bool> states = new Dictionary<string, bool> { 
+				{ "has_ally", false },
+				{ "is_murderer", false },
+				{ "deleted_footage", false }
+			};
 			Dictionary<string, Event> events = JsonParser.ParseEvents();
 
-			GoThroughEvent(ref events, "EventStart");
+			GoThroughEvent(ref events, ref states, "EventStart");
 		}
 
-		public void GoThroughEvent(ref Dictionary<string, Event> events, string happening)
+		public void GoThroughEvent(
+			ref Dictionary<string, Event> events,
+			ref Dictionary<string, bool> states,
+			string happening
+			)
 		{
 			Console.Clear();
 			Console.WriteLine(events[happening].Description);
@@ -33,20 +42,12 @@ namespace A_Bloody_Day
 				if (int.TryParse(pressedKey.KeyChar.ToString(), out int number) && number <= i)
 				{
 					keyValid = true;
+
+					ChangeState(events[happening].Options[number - 1].StateChange, ref states);
+
 					string whereTo = events[happening].Options[number - 1].JumpTo;
 
-					if (whereTo == "MainMenu")
-					{
-						return;
-					}
-					else if (whereTo != string.Empty)
-					{
-						GoThroughEvent(ref events, whereTo);
-					}
-					else
-					{
-						Die();
-					}
+					GoToNextStep(ref events, ref states, whereTo);
 				}
 				else
 				{
@@ -55,7 +56,31 @@ namespace A_Bloody_Day
 			}
 		}
 
-		public void Die()
+		private void GoToNextStep(ref Dictionary<string, Event> events, ref Dictionary<string, bool> states, string whereTo)
+		{
+			if (whereTo == "MainMenu")
+			{
+				return;
+			}
+			else if (whereTo != string.Empty)
+			{
+				GoThroughEvent(ref events, ref states, whereTo);
+			}
+			else
+			{
+				Die();
+			}
+		}
+
+		private void ChangeState(string stateToChange, ref Dictionary<string, bool> states)
+		{
+			if (!(stateToChange is null) && stateToChange != "")
+			{
+				states[stateToChange] = !states[stateToChange];
+			}
+		}
+
+		private void Die()
 		{
 			Console.WriteLine("You die");
 			Console.WriteLine("Press any key to go back to main menu...");
