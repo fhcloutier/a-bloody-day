@@ -17,6 +17,9 @@ namespace A_Bloody_Day
 			};
 			Dictionary<string, Event> events = JsonParser.ParseEvents();
 
+			//Console.WriteLine(JsonParser.CreateJson());
+			//Console.ReadKey();
+
 			GoThroughEvent(ref events, ref states, "EventStart");
 		}
 
@@ -31,6 +34,15 @@ namespace A_Bloody_Day
 			int i = 0;
 			foreach (Option option in events[happening].Options)
 			{
+				//TODO: Move this to InterpretConditions() or a different class
+				if (option.Condition != null)
+				{
+					if(states[option.Condition["If"]])
+					{
+						option.GetType().GetProperty(option.Condition["FieldToChange"]).SetValue(option, option.Condition["Value"]);
+					}
+					List<string> keyList = new List<string>(option.Condition.Keys);
+				}
 				i++;
 				Console.WriteLine(i + " -> " + option.Text);
 			}
@@ -48,6 +60,10 @@ namespace A_Bloody_Day
 					string whereTo = events[happening].Options[number - 1].JumpTo;
 
 					GoToNextStep(ref events, ref states, whereTo);
+				}
+				else if (pressedKey.KeyChar == 'q')
+				{
+					break;
 				}
 				else
 				{
@@ -74,7 +90,7 @@ namespace A_Bloody_Day
 
 		private void ChangeState(string stateToChange, ref Dictionary<string, bool> states)
 		{
-			if (!(stateToChange is null) && stateToChange != "")
+			if (stateToChange != null && stateToChange != "")
 			{
 				states[stateToChange] = !states[stateToChange];
 			}
@@ -87,6 +103,11 @@ namespace A_Bloody_Day
 			Console.ReadKey(true);
 			Console.Clear();
 			return;
+		}
+
+		private void InterpretConditions()
+		{
+
 		}
 	}
 }

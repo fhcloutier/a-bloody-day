@@ -21,7 +21,7 @@
 			},
 			{
 				"Text": "You open the door on the left.",
-				"JumpTo": ""
+				"JumpTo": "EventCameraRoom"
 			}
 		]
 	},
@@ -30,10 +30,33 @@
 		"Options": [
 			{
 				"Text": "You run to get help.",
-				"JumpTo": "GoodEnding1"
+				"JumpTo": "GoodEnding1",
+				"Condition": {
+					"If": "is_murderer",
+					"FieldToChange": "JumpTo",
+					"Value": ""
+				}
 			},
 			{
 				"Text": "You look around, trying to figure out where you are.",
+				"JumpTo": "",
+				"Condition": {
+					"If": "has_ally",
+					"FieldToChange": "JumpTo",
+					"Value": "EventNoiseOutside"
+				}
+			}
+		]
+	},
+	"EventNoiseOutside": {
+		"Description": "You hear some noises coming from the door.",
+		"Options": [
+			{
+				"Text": "You hold the door while your ally go to get help",
+				"JumpTo": ""
+			},
+			{
+				"Text": "You try to face the guard with the two of you",
 				"JumpTo": ""
 			}
 		]
@@ -74,6 +97,38 @@
 			{
 				"Text": "You walk out alone.",
 				"JumpTo": "EventHallway"
+			}
+		]
+	},
+	"EventCameraRoom": {
+		"Description": "You slowly open the door, finding a room filled with screens. In front of all those screens is a chair, in which you can make out someone facing the opposite direction.",
+		"Options": [
+			{
+				"Text": "You sneak behind the guard and hit him.",
+				"JumpTo": "EventDisableGuard",
+				"Condition": {
+					"If": "has_ally",
+					"FieldToChange": "Text",
+					"Value": "You overwhelm the gard with your new found partner."
+				}
+			},
+			{
+				"Text": "You close the door as quietly as possible and go to the other door",
+				"JumpTo": ""
+			}
+		]
+	},
+	"EventDisableGuard": {
+		"Description": "You quickly tie up the guard and search him, finding his cellphone. You take it.",
+		"Options": [
+			{
+				"Text": "You go back to the other door",
+				"JumpTo": "EventOutside", //TODO: Change this to be a different Outside or add new condition
+			},
+			{
+				//TODO: DON'T SHOW IF NOT is_murderer
+				"Text": "You explore the room",
+				"JumpTo": ""
 			}
 		]
 	},

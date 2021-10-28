@@ -11,12 +11,14 @@ namespace A_Bloody_Day
 		public string Text { get; set; }
 		public string JumpTo { get; set; }
 		public string StateChange { get; set; }
+		public Dictionary<string, string> Condition { get; set; }
 
-		public Option(string text, string jumpTo, string stateChange)
+		public Option(string text, string jumpTo, string stateChange, Dictionary<string, string> condition)
 		{
 			Text = text;
 			JumpTo = jumpTo;
 			StateChange = stateChange;
+			Condition = condition;
 		}
 		
 		public override string ToString()
