@@ -8,58 +8,50 @@ namespace A_Bloody_Day
 {
 	class Game
 	{
-		public void StartGame()
-		{
-			Dictionary<string, bool> states = new Dictionary<string, bool> { 
+		private Dictionary<string, bool> States { get; } = new Dictionary<string, bool> {
 				{ "has_ally", false },
 				{ "is_murderer", false },
 				{ "deleted_footage", false }
 			};
-			Dictionary<string, Event> events = JsonParser.ParseEvents();
+
+		private Dictionary<string, Event> Events { get; set; }
+
+		public void StartGame()
+		{
+			Events = JsonParser.ParseEvents();
 
 			//Console.WriteLine(JsonParser.CreateJson());
 			//Console.ReadKey();
 
-			GoThroughEvent(ref events, ref states, "EventStart");
+			GoThroughEvent("EventStart");
 		}
 
-		public void GoThroughEvent(
-			ref Dictionary<string, Event> events,
-			ref Dictionary<string, bool> states,
-			string happening
-			)
+		public void GoThroughEvent(string happening)
 		{
 			Console.Clear();
-			Console.WriteLine(events[happening].Description);
-			int i = 0;
-			foreach (Option option in events[happening].Options)
+			Console.WriteLine(Events[happening].Description);
+			int optionCount = Events[happening].Options.Count;
+			for (int i = 0; i < optionCount; i++)
 			{
-				//TODO: Move this to InterpretConditions() or a different class
-				if (option.Condition != null)
-				{
-					if(states[option.Condition["If"]])
-					{
-						option.GetType().GetProperty(option.Condition["FieldToChange"]).SetValue(option, option.Condition["Value"]);
-					}
-					List<string> keyList = new List<string>(option.Condition.Keys);
-				}
-				i++;
-				Console.WriteLine(i + " -> " + option.Text);
+				Events[happening].Options[i] = InterpretConditions(Events[happening].Options[i]);
+
+				Console.WriteLine((i + 1) + " -> " + Events[happening].Options[i].Text);
 			}
 
 			bool keyValid = false;
 			while (keyValid == false)
 			{
 				ConsoleKeyInfo pressedKey = Console.ReadKey(true);
-				if (int.TryParse(pressedKey.KeyChar.ToString(), out int number) && number <= i)
+				if (int.TryParse(pressedKey.KeyChar.ToString(), out int number)
+					&& 1 <= number && number <= optionCount)
 				{
 					keyValid = true;
 
-					ChangeState(events[happening].Options[number - 1].StateChange, ref states);
+					ChangeState(Events[happening].Options[number - 1].StateChange);
 
-					string whereTo = events[happening].Options[number - 1].JumpTo;
+					string whereTo = Events[happening].Options[number - 1].JumpTo;
 
-					GoToNextStep(ref events, ref states, whereTo);
+					GoToNextStep(whereTo);
 				}
 				else if (pressedKey.KeyChar == 'q')
 				{
@@ -67,12 +59,12 @@ namespace A_Bloody_Day
 				}
 				else
 				{
-					Console.WriteLine("\nPlease press a number between 1 and " + i);
+					Console.WriteLine("\nPlease press a number between 1 and " + optionCount);
 				}
 			}
 		}
 
-		private void GoToNextStep(ref Dictionary<string, Event> events, ref Dictionary<string, bool> states, string whereTo)
+		private void GoToNextStep(string whereTo)
 		{
 			if (whereTo == "MainMenu")
 			{
@@ -80,7 +72,7 @@ namespace A_Bloody_Day
 			}
 			else if (whereTo != string.Empty)
 			{
-				GoThroughEvent(ref events, ref states, whereTo);
+				GoThroughEvent(whereTo);
 			}
 			else
 			{
@@ -88,11 +80,11 @@ namespace A_Bloody_Day
 			}
 		}
 
-		private void ChangeState(string stateToChange, ref Dictionary<string, bool> states)
+		private void ChangeState(string stateToChange)
 		{
 			if (stateToChange != null && stateToChange != "")
 			{
-				states[stateToChange] = !states[stateToChange];
+				States[stateToChange] = !States[stateToChange];
 			}
 		}
 
@@ -105,9 +97,17 @@ namespace A_Bloody_Day
 			return;
 		}
 
-		private void InterpretConditions()
+		private Option InterpretConditions(Option option)
 		{
+			if (option.Condition != null)
+			{
+				if (States[option.Condition["If"]])
+				{
+					option.GetType().GetProperty(option.Condition["FieldToChange"]).SetValue(option, option.Condition["Value"]);
+				}
+			}
 
+			return option;
 		}
 	}
 }
