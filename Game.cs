@@ -16,26 +16,26 @@ namespace A_Bloody_Day
 
 		private Dictionary<string, Event> Events { get; set; }
 
-		public void StartGame()
+		public void StartGame(string firstEvent = "EventStart")
 		{
 			Events = JsonParser.ParseEvents();
 
 			//Console.WriteLine(JsonParser.CreateJson());
 			//Console.ReadKey();
 
-			GoThroughEvent("EventStart");
+			GoThroughEvent(firstEvent);
 		}
 
-		public void GoThroughEvent(string happening)
+		public void GoThroughEvent(string currentEvent)
 		{
 			Console.Clear();
-			Console.WriteLine(Events[happening].Description);
-			int optionCount = Events[happening].Options.Count;
+			Console.WriteLine(Events[currentEvent].Description);
+			int optionCount = Events[currentEvent].Options.Count;
 			for (int i = 0; i < optionCount; i++)
 			{
-				Events[happening].Options[i] = InterpretConditions(Events[happening].Options[i]);
+				Events[currentEvent].Options[i] = InterpretConditions(Events[currentEvent].Options[i]);
 
-				Console.WriteLine((i + 1) + " -> " + Events[happening].Options[i].Text);
+				Console.WriteLine((i + 1) + " -> " + Events[currentEvent].Options[i].Text);
 			}
 
 			bool keyValid = false;
@@ -47,15 +47,16 @@ namespace A_Bloody_Day
 				{
 					keyValid = true;
 
-					ChangeState(Events[happening].Options[number - 1].StateChange);
+					ChangeState(Events[currentEvent].Options[number - 1].StateChange);
 
-					string whereTo = Events[happening].Options[number - 1].JumpTo;
+					string whereTo = Events[currentEvent].Options[number - 1].JumpTo;
 
 					GoToNextStep(whereTo);
 				}
 				else if (pressedKey.KeyChar == 'q')
 				{
-					break;
+					keyValid = true;
+					Save(currentEvent);
 				}
 				else
 				{
@@ -108,6 +109,36 @@ namespace A_Bloody_Day
 			}
 
 			return option;
+		}
+
+		private void Save(string currentEvent)
+		{
+			string saveData = "{"+currentEvent;
+
+			foreach (bool state in States.Values)
+			{
+				saveData += "," + Convert.ToInt32(state);
+			}
+			saveData += "}";
+
+			Console.WriteLine(saveData);
+			Console.ReadKey();
+
+			FileManager.WriteToFile("save", saveData);
+		}
+
+		public void Load()
+		{
+			string loadData = FileManager.ReadFromFile("save");
+
+			object test = JsonParser.ParseLoadData(loadData);
+
+			SavedGame save = new SavedGame(test);
+
+
+			Console.WriteLine(test.ToString());
+			Console.ReadLine();
+			//StartGame(loadedEvent);
 		}
 	}
 }

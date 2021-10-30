@@ -21,7 +21,8 @@ namespace A_Bloody_Day
 
 				if (keyPressed.KeyChar == GameOption.Option1)
 				{
-					new Game().StartGame();
+					new Game().Load();
+					//new Game().StartGame();
 					Console.Clear();
 				}
 				else if (keyPressed.KeyChar == GameOption.Option2)

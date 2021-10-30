@@ -17,6 +17,11 @@ namespace A_Bloody_Day
 			return JsonConvert.DeserializeObject<Dictionary<string, Event>>(json);
 		}
 
+		public static object ParseLoadData(string data)
+		{
+			return JsonConvert.DeserializeObject<object>(data);
+		}
+
 		public static Event ParseInfo()
 		{
 			Event test = JsonConvert.DeserializeObject<Event>(@"{" +
