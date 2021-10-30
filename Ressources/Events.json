@@ -123,12 +123,21 @@
 		"Options": [
 			{
 				"Text": "You go back to the other door",
-				"JumpTo": "EventOutside", //TODO: Change this to be a different Outside or add new condition
+				"JumpTo": "EventOutside" //TODO: Change this to be a different Outside or add new condition
 			},
 			{
 				//TODO: DON'T SHOW IF NOT is_murderer
 				"Text": "You explore the room",
-				"JumpTo": ""
+				"JumpTo": "EventDeleteFootage"
+			}
+		]
+	},
+	"EventDeleteFootage": {
+		"Description": "You delete the record of you killing somebody.",
+		"Options": [
+			{
+				"Text": "You go back to the other door",
+				"JumpTo": "EventOutside" //TODO: Change this to be a different Outside or add new condition
 			}
 		]
 	},

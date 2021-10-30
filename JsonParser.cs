@@ -12,7 +12,7 @@ namespace A_Bloody_Day
 	{
 		public static Dictionary<string, Event> ParseEvents()
 		{
-			string json = File.ReadAllText(@"Events.json");
+			string json = File.ReadAllText(@"Ressources/Events.json");
 
 			return JsonConvert.DeserializeObject<Dictionary<string, Event>>(json);
 		}

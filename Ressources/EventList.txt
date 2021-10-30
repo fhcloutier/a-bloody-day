@@ -1,0 +1,12 @@
+﻿//Just a text file to see the current list of events added to Events.json
+EventStart
+EventHallway
+EventOutside
+EventNoiseOutside
+EventEyes
+EventHelp
+EventKill
+EventCameraRoom
+EventDisableGuard
+EventDeleteFootage
+GoodEnding1
