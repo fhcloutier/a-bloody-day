@@ -8,12 +8,7 @@ namespace A_Bloody_Day
 {
 	class SavedGame
 	{
-		private string CurrentEvent { get; }
-		private int[] States { get; }
-
-		public SavedGame(object test)
-		{
-			//CurrentEvent
-		}
+		public string Event { get; set; }
+		public int[] States { get; set; }
 	}
 }

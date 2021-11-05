@@ -113,13 +113,13 @@ namespace A_Bloody_Day
 
 		private void Save(string currentEvent)
 		{
-			string saveData = "{"+currentEvent;
+			string saveData = "{\"Event\":"+currentEvent+",\"States\":[";
 
 			foreach (bool state in States.Values)
 			{
-				saveData += "," + Convert.ToInt32(state);
+				saveData += Convert.ToInt32(state);
 			}
-			saveData += "}";
+			saveData += "]}";
 
 			Console.WriteLine(saveData);
 			Console.ReadKey();
@@ -131,13 +131,18 @@ namespace A_Bloody_Day
 		{
 			string loadData = FileManager.ReadFromFile("save");
 
-			object test = JsonParser.ParseLoadData(loadData);
+			SavedGame save = JsonParser.ParseLoadData(loadData);
 
-			SavedGame save = new SavedGame(test);
+			int i = 0;
+			List<string> keys = new List<string>(States.Keys);
+			foreach (string key in keys)
+			{
+				States[key] = Convert.ToBoolean(save.States[i]); ;
+				i++;
+			}
 
+			Console.WriteLine(save.ToString());
 
-			Console.WriteLine(test.ToString());
-			Console.ReadLine();
 			//StartGame(loadedEvent);
 		}
 	}
