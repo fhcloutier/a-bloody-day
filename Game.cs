@@ -20,9 +20,6 @@ namespace A_Bloody_Day
 		{
 			Events = JsonParser.ParseEvents();
 
-			//Console.WriteLine(JsonParser.CreateJson());
-			//Console.ReadKey();
-
 			GoThroughEvent(firstEvent);
 		}
 
@@ -104,7 +101,8 @@ namespace A_Bloody_Day
 			{
 				if (States[option.Condition["If"]])
 				{
-					option.GetType().GetProperty(option.Condition["FieldToChange"]).SetValue(option, option.Condition["Value"]);
+					option.GetType().GetProperty(option.Condition["FieldToChange"])
+						.SetValue(option, option.Condition["Value"]);
 				}
 			}
 
@@ -115,10 +113,7 @@ namespace A_Bloody_Day
 		{
 			string saveData = "{\"Event\":\""+currentEvent+"\",\"States\":[";
 
-			foreach (bool state in States.Values)
-			{
-				saveData += Convert.ToInt32(state) + ",";
-			}
+			saveData += ConvertStatesToSave();
 			saveData = saveData.Remove(saveData.Length - 1);
 			saveData += "]}";
 
@@ -131,6 +126,24 @@ namespace A_Bloody_Day
 
 			SavedGame save = JsonParser.ParseLoadData(loadData);
 
+			SetStatesFromSave(save);
+
+			StartGame(save.Event);
+		}
+
+		public string ConvertStatesToSave()
+		{
+			string statesToSave = "";
+			foreach (bool state in States.Values)
+			{
+				statesToSave += Convert.ToInt32(state) + ",";
+			}
+
+			return statesToSave;
+		}
+
+		public void SetStatesFromSave(SavedGame save)
+		{
 			int i = 0;
 			List<string> keys = new List<string>(States.Keys);
 			foreach (string key in keys)
@@ -138,8 +151,6 @@ namespace A_Bloody_Day
 				States[key] = Convert.ToBoolean(save.States[i]); ;
 				i++;
 			}
-
-			StartGame(save.Event);
 		}
 	}
 }
