@@ -113,16 +113,14 @@ namespace A_Bloody_Day
 
 		private void Save(string currentEvent)
 		{
-			string saveData = "{\"Event\":"+currentEvent+",\"States\":[";
+			string saveData = "{\"Event\":\""+currentEvent+"\",\"States\":[";
 
 			foreach (bool state in States.Values)
 			{
-				saveData += Convert.ToInt32(state);
+				saveData += Convert.ToInt32(state) + ",";
 			}
+			saveData = saveData.Remove(saveData.Length - 1);
 			saveData += "]}";
-
-			Console.WriteLine(saveData);
-			Console.ReadKey();
 
 			FileManager.WriteToFile("save", saveData);
 		}
@@ -141,9 +139,7 @@ namespace A_Bloody_Day
 				i++;
 			}
 
-			Console.WriteLine(save.ToString());
-
-			//StartGame(loadedEvent);
+			StartGame(save.Event);
 		}
 	}
 }

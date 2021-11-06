@@ -15,17 +15,21 @@ namespace A_Bloody_Day
 				Console.WriteLine("Welcome to \"A Bloody Day\"\n");
 				Console.WriteLine("Please enter one of the following keys:");
 				Console.WriteLine("1 -> Start a new game");
-				Console.WriteLine("2 -> Quit\n");
+				Console.WriteLine("2 -> Load game");
+				Console.WriteLine("3 -> Quit\n");
 
 				ConsoleKeyInfo keyPressed = Console.ReadKey(true);
 
 				if (keyPressed.KeyChar == GameOption.Option1)
 				{
-					new Game().Load();
-					//new Game().StartGame();
+					new Game().StartGame();
 					Console.Clear();
 				}
 				else if (keyPressed.KeyChar == GameOption.Option2)
+				{
+					new Game().Load();
+				}
+				else if (keyPressed.KeyChar == GameOption.Option3)
 				{
 					break;
 				}
@@ -41,6 +45,7 @@ namespace A_Bloody_Day
 	{
 		public readonly static GameOption Option1 = new GameOption('1');
 		public readonly static GameOption Option2 = new GameOption('2');
+		public readonly static GameOption Option3 = new GameOption('3');
 
 		private readonly char _option;
 
